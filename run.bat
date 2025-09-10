@@ -1,0 +1,3 @@
+@echo off
+echo Iniciando YouTube Dashboard...
+npm start

@@ -73,6 +73,19 @@ npm start
 
 O aplicativo estará disponível em `http://localhost:3000`
 
+#### 🚀 Executar com Arquivos .bat (Windows)
+
+Para facilitar a execução no Windows, foram criados dois arquivos `.bat`:
+
+- **`start.bat`**: Arquivo completo que verifica dependências e configurações
+- **`run.bat`**: Arquivo simples para execução rápida
+
+**Como usar:**
+
+1. Clique duas vezes no arquivo `start.bat` (recomendado para primeira execução)
+2. Ou use o `run.bat` se já tiver tudo configurado
+3. A aplicação será aberta no navegador em `http://localhost:3000`
+
 ## 🎯 Como Usar
 
 ### 1. Login
