@@ -4,10 +4,14 @@ Um aplicativo web moderno para gerenciar suas inscrições do YouTube e visualiz
 
 ## 🚀 Funcionalidades
 
-- **Autenticação OAuth2**: Login seguro com Google
-- **Gerenciamento de Inscrições**: Visualize e filtre todos os seus canais inscritos
-- **Feeds Personalizados**: Veja os últimos vídeos dos canais selecionados
-- **Filtros Avançados**: Busque por canais e vídeos, filtre por data e ordene por relevância
+- **Autenticação OAuth2**: Login seguro com Google para acessar dados do YouTube
+- **Gerenciamento de Inscrições**: Visualize, busque e selecione canais inscritos para acompanhar
+- **Feeds Personalizados**: Veja os últimos vídeos dos canais selecionados com filtros avançados
+- **Gerenciamento de Playlists**: Crie, edite e visualize suas playlists do YouTube
+- **Vídeos do Canal**: Explore vídeos específicos de um canal selecionado
+- **Busca de Canais**: Encontre novos canais para se inscrever
+- **Filtros Avançados**: Busque por vídeos, ordene por data, visualizações ou relevância
+- **Cache Inteligente**: Otimização de requisições para melhor performance
 - **Interface Moderna**: Design inspirado no YouTube com tema escuro
 - **Responsivo**: Funciona perfeitamente em desktop e mobile
 
@@ -36,6 +40,10 @@ Um aplicativo web moderno para gerenciar suas inscrições do YouTube e visualiz
 3. Ative a **YouTube Data API v3**
 4. Crie credenciais:
    - **API Key** para acessar a API do YouTube
+   - **OAuth 2.0 Client ID (Web application)** para autenticação
+5. No OAuth Client ID (Web):
+   - Authorized JavaScript origins: `http://localhost:3000`
+   - (Opcional, apenas se usar fallback OAuth) Authorized redirect URIs: `http://localhost:3000`
    - **OAuth 2.0 Client ID** para autenticação
 
 ### 2. Configurar Variáveis de Ambiente
@@ -47,8 +55,8 @@ Um aplicativo web moderno para gerenciar suas inscrições do YouTube e visualiz
 
 2. Edite o arquivo `.env` e adicione suas credenciais:
    ```env
-   REACT_APP_YOUTUBE_API_KEY=sua_chave_da_api_aqui
-   REACT_APP_GOOGLE_CLIENT_ID=seu_client_id_aqui
+   VITE_YOUTUBE_API_KEY=sua_chave_da_api_aqui
+   VITE_GOOGLE_CLIENT_ID=seu_client_id_aqui
    ```
 
 ### 3. Instalar Dependências
@@ -68,21 +76,34 @@ O aplicativo estará disponível em `http://localhost:3000`
 ## 🎯 Como Usar
 
 ### 1. Login
+
 - Clique em "Entrar com Google"
 - Autorize o acesso às suas informações do YouTube
 - Você será redirecionado de volta para o aplicativo
 
 ### 2. Gerenciar Inscrições
+
 - Na aba "Inscrições", visualize todos os seus canais inscritos
 - Use a barra de busca para encontrar canais específicos
 - Clique em "Selecionar" nos canais que deseja acompanhar
 
 ### 3. Visualizar Feeds
+
 - Na aba "Feeds", veja os últimos vídeos dos canais selecionados
 - Use os filtros para:
   - Buscar vídeos específicos
   - Ordenar por data, visualizações ou curtidas
   - Filtrar por período (hoje, semana, mês)
+
+### 4. Gerenciar Playlists
+
+- Na aba "Playlists", visualize e edite suas playlists
+- Crie novas playlists ou modifique existentes
+
+### 5. Explorar Canais
+
+- Na aba "Canais", veja vídeos de um canal específico
+- Busque por canais na aba "Buscar" para descobrir novos conteúdos
 
 ## 🔧 Estrutura do Projeto
 

@@ -88,6 +88,7 @@ const SubscriptionCard: React.FC<SubscriptionCardProps> = ({ subscription, isSel
                 <Calendar size={14} />
                 <span>Inscrito em {formatDate(subscription.snippet.publishedAt)}</span>
               </div>
+              <div className="text-[11px] text-gray-500 break-all">ID: {subscription.snippet.resourceId.channelId}</div>
             </div>
           )}
 
@@ -102,21 +103,15 @@ const SubscriptionCard: React.FC<SubscriptionCardProps> = ({ subscription, isSel
               <ExternalLink size={14} />
               Ver Canal
             </a>
-            
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onSelect(!isSelected);
-              }}
-              className={`px-3 py-1 rounded text-sm flex items-center gap-1 transition-colors ${
-                isSelected
-                  ? 'bg-youtube-red text-white'
-                  : 'bg-gray-600 text-gray-300 hover:bg-gray-500'
-              }`}
-            >
-              <Check size={14} />
-              {isSelected ? 'Selecionado' : 'Selecionar'}
-            </button>
+            <label className="text-sm text-gray-300 flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={isSelected}
+                onChange={(e) => { e.stopPropagation(); onSelect(e.target.checked); }}
+                className="w-4 h-4 accent-red-600"
+              />
+              Selecionar
+            </label>
           </div>
         </div>
       </div>

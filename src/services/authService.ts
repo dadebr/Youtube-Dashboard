@@ -1,30 +1,46 @@
-interface GoogleAuthResponse {
-  access_token: string;
-  expires_in: number;
-  token_type: string;
-  scope: string;
-}
-
 class AuthService {
-  private readonly CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+  private readonly CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID as string | undefined;
   private readonly SCOPES = [
     'https://www.googleapis.com/auth/youtube.readonly',
-    'https://www.googleapis.com/auth/youtube.force-ssl'
+    'https://www.googleapis.com/auth/youtube.force-ssl',
+    // Escopo amplo para evitar falhas de permissão em listagens e ações (subscribe/unsubscribe)
+    'https://www.googleapis.com/auth/youtube'
   ].join(' ');
 
-  async authenticate(): Promise<string> {
+  private waitForGoogleIdentity(timeoutMs = 10000): Promise<void> {
     return new Promise((resolve, reject) => {
+      try {
+        if (typeof window !== 'undefined' && (window as any).google?.accounts?.oauth2) {
+          resolve();
+          return;
+        }
+        const start = Date.now();
+        const interval = window.setInterval(() => {
+          if ((window as any).google?.accounts?.oauth2) {
+            window.clearInterval(interval);
+            resolve();
+          } else if (Date.now() - start > timeoutMs) {
+            window.clearInterval(interval);
+            reject(new Error('Google Identity Services não carregou. Verifique conexão e bloqueadores.'));
+          }
+        }, 50);
+      } catch (err) {
+        reject(new Error('Falha ao verificar Google Identity Services'));
+      }
+    });
+  }
+
+  async authenticate(): Promise<string> {
+    return new Promise(async (resolve, reject) => {
       if (!this.CLIENT_ID) {
-        reject(new Error('CLIENT_ID não configurado'));
+        reject(new Error('CLIENT_ID não configurado. Defina VITE_GOOGLE_CLIENT_ID no .env.'));
         return;
       }
-
-      // Usa o Google Identity Services para autenticação mais moderna
-      if (typeof window !== 'undefined' && (window as any).google) {
+      try {
+        await this.waitForGoogleIdentity();
         this.authenticateWithGoogleIdentity(resolve, reject);
-      } else {
-        // Fallback para OAuth2 tradicional
-        this.authenticateWithOAuth2(resolve, reject);
+      } catch (error) {
+        reject(error as Error);
       }
     });
   }
@@ -42,7 +58,7 @@ class AuthService {
           }
         },
         error_callback: (error: any) => {
-          reject(new Error(error.message || 'Erro na autenticação'));
+          reject(new Error(error?.message || 'Erro na autenticação'));
         }
       });
 
@@ -50,18 +66,6 @@ class AuthService {
     } catch (error) {
       reject(new Error('Erro ao inicializar autenticação Google'));
     }
-  }
-
-  private authenticateWithOAuth2(resolve: (token: string) => void, reject: (error: Error) => void) {
-    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
-      `client_id=${this.CLIENT_ID}&` +
-      `redirect_uri=${encodeURIComponent(window.location.origin)}&` +
-      `response_type=token&` +
-      `scope=${encodeURIComponent(this.SCOPES)}&` +
-      `include_granted_scopes=true`;
-
-    // Redireciona para a página de autenticação
-    window.location.href = authUrl;
   }
 
   logout() {

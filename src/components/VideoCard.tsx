@@ -4,9 +4,11 @@ import { ProcessedVideo } from '../types/youtube';
 
 interface VideoCardProps {
   video: ProcessedVideo;
+  onSave?: () => void;
+  isSaved?: boolean;
 }
 
-const VideoCard: React.FC<VideoCardProps> = ({ video }) => {
+const VideoCard: React.FC<VideoCardProps> = ({ video, onSave, isSaved }) => {
   const formatNumber = (num: string) => {
     const number = parseInt(num);
     if (number >= 1000000) {
@@ -113,6 +115,12 @@ const VideoCard: React.FC<VideoCardProps> = ({ video }) => {
             <ExternalLink size={14} />
             Assistir
           </a>
+          {onSave && (
+            <button
+              onClick={onSave}
+              className={`text-sm px-3 py-1 rounded ${isSaved ? 'bg-youtube-red text-white' : 'bg-gray-600 text-gray-300 hover:bg-gray-500'}`}
+            >{isSaved ? 'Salvo' : 'Ver depois'}</button>
+          )}
         </div>
       </div>
     </div>

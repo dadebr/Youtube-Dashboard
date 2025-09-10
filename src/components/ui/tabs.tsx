@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
 interface TabsContextType {
   activeTab: string;
@@ -69,13 +69,17 @@ interface TabsContentProps {
 
 export const TabsContent: React.FC<TabsContentProps> = ({ value, children, className }) => {
   const { activeTab } = useContext(TabsContext)!;
+  // Mantém o conteúdo montado após a primeira ativação para preservar estado ao alternar abas
+  const [mounted, setMounted] = useState(activeTab === value);
+  useEffect(() => {
+    if (activeTab === value) setMounted(true);
+  }, [activeTab, value]);
 
-  if (activeTab !== value) {
-    return null;
-  }
+  if (!mounted) return null;
 
+  const hidden = activeTab !== value;
   return (
-    <div className={className}>
+    <div className={className} style={hidden ? { display: 'none' } : undefined} aria-hidden={hidden}>
       {children}
     </div>
   );
